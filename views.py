@@ -4,8 +4,23 @@ from django.http import JsonResponse
 import pandas as pd
 import numpy as np
 from .models import PatientData
-# Load the model
-model45 = joblib.load('C:\\Users\\RSV2045\\HDP\\HDproject\\roby\\hd_model\\heart_disease_model.pkl')
+import os
+
+
+# Get the project root directory dynamically
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__)) 
+
+# Construct the path to the model file using the relative path
+model_path = os.path.join(PROJECT_ROOT, 'hd_model', 'heart_disease_model.pkl')
+
+# Check if the model file exists at the constructed path
+if not os.path.exists(model_path):
+    raise ValueError(f"The model file does not exist at {model_path}. Please check the path.")
+
+# Load the model from the file
+model45 = joblib.load(model_path)
+
+print("Model loaded successfully!")
 
 # Define a function that will be called when the user visits the /predict
 def predict(request):
