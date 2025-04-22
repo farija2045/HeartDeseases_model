@@ -1,0 +1,65 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prediction UI</title>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+  <script src="{% static 'js/script.js' %}"></script>
+
+</head>
+<body>
+  <div class="container">
+    <h1>Heart Disease Prediction Form</h1>
+    <form id="predictionForm">
+      <label for="age">Age:</label>
+      <input type="number" id="age" name="Age" step="0.1" required>
+
+      <label for="gender">Gender (0 for Female, 1 for Male):</label>
+      <input type="number" id="gender" name="Gender" step="1" required>
+
+      <label for="bloodPressure">Blood Pressure:</label>
+      <input type="number" id="bloodPressure" name="BloodPressure" step="0.1" required>
+
+      <label for="cholesterol">Cholesterol:</label>
+      <input type="number" id="cholesterol" name="Cholesterol" step="0.1" required>
+
+      <label for="heartRate">Heart Rate:</label>
+      <input type="number" id="heartRate" name="HeartRate" step="0.1" required>
+
+      <label for="quantumPatternFeature">Quantum Pattern Feature:</label>
+      <input type="number" id="quantumPatternFeature" name="QuantumPatternFeature" step="0.1" required>
+
+      <button type="button" id="predictBtn">Predict</button>
+    </form>
+    <div id="result"></div>
+  </div>
+  <script>
+    document.getElementById('predictBtn').addEventListener('click', async () => {
+      const age = document.getElementById('age').value;
+      const gender = document.getElementById('gender').value;
+      const bloodPressure = document.getElementById('bloodPressure').value;
+      const cholesterol = document.getElementById('cholesterol').value;
+      const heartRate = document.getElementById('heartRate').value;
+      const quantumPatternFeature = document.getElementById('quantumPatternFeature').value;
+
+      const url = `/predict/?Age=${age}&Gender=${gender}&BloodPressure=${bloodPressure}&Cholesterol=${cholesterol}&HeartRate=${heartRate}&QuantumPatternFeature=${quantumPatternFeature}`;
+
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (response.ok) {
+          document.getElementById('result').innerHTML = `<p>${data.message}</p>`;
+        } else {
+          document.getElementById('result').innerHTML = `<p>Error: ${data.error}</p>`;
+        }
+      } catch (error) {
+        document.getElementById('result').innerHTML = `<p>An unexpected error occurred: ${error.message}</p>`;
+      }
+    });
+  </script>
+</body>
+</html>
